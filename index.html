@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>HW 5 – Basketball Court Infrastructure</title>
+
+  <!-- HUD styling -->
+  <link rel="stylesheet" href="css/style.css">
+
+
+  <!-- Three.js (global) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+
+<body>
+  <!-- ── HUD overlay ─────────────────────────────────────────────── -->
+  <div id="ui-container">
+    <!-- Scoreboard -->
+    <div id="scoreboard" class="hud-panel">
+      <div class="team-score">
+        <span class="team-name">HOME</span>
+        <span class="score">000</span>
+      </div>
+      <div class="game-info">
+        <span class="period">1ST</span>
+        <span class="time">12:00</span>
+      </div>
+      <div class="team-score">
+        <span class="team-name">AWAY</span>
+        <span class="score">000</span>
+      </div>
+    </div>
+    
+                <!-- Game Mode Display - Top Center -->
+            <div id="game-mode-display" class="hud-panel mode-panel">
+              <h3>GAME MODE</h3>
+              <div class="mode-container">
+                <div class="mode-item">
+                  <span id="game-mode">FREE SHOOT</span>
+                </div>
+                <div class="mode-item" id="time-display" style="display: none;">
+                  <span class="mode-label">Time:</span>
+                  <span id="time-remaining" class="time-countdown">60</span>
+                </div>
+                
+                <!-- Game Mode Buttons -->
+                <div id="game-buttons" class="mode-buttons-group">
+                  <div class="mode-item">
+                    <button id="reset-game-button" class="mode-button reset-btn">RESET GAME</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+    
+    <!-- Shot Power Display - Top Right -->
+    <div id="power-display" class="hud-panel power-panel">
+      <h3>SHOT POWER</h3>
+      <div class="power-container">
+        <div class="power-bar-container">
+          <div id="power-bar" class="power-bar"></div>
+        </div>
+        <div class="power-text">
+          <span id="shot-power">50%</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Statistics Display - Bottom Left -->
+    <div id="stats-display" class="hud-panel stats-panel">
+      <h3>STATISTICS</h3>
+      <div class="stats-container">
+        <div class="stat-item">
+          <span class="stat-label">Shots Made:</span>
+          <span id="shots-made">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Shot Attempts:</span>
+          <span id="shot-attempts">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Accuracy:</span>
+          <span id="shooting-percentage">0%</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Total Score:</span>
+          <span id="total-score">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Swishes:</span>
+          <span id="swish-shots">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Current Combo:</span>
+          <span id="current-combo">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Best Combo:</span>
+          <span id="max-combo">0</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Game Status Display - Bottom Left -->
+    <div id="game-status" class="hud-panel status-panel">
+      <h3>GAME STATUS</h3>
+      <div class="status-container">
+        <div class="status-item">
+          <span class="status-label">Ball Status:</span>
+          <span id="ball-status">Ready</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">Next Shot:</span>
+          <span id="next-shot-status">Available</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">Auto-Camera:</span>
+          <span id="auto-camera-status">Off</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Help Button -->
+    <div id="help-button" class="hud-panel">
+      <button id="help-toggle">?</button>
+    </div>
+  </div>
+  
+  <!-- Help Overlay -->
+  <div id="help-overlay" class="help-overlay">
+    <div class="help-content">
+      <h2>Basketball Game Controls</h2>
+      <div class="help-section">
+        <h3>Movement</h3>
+        <p><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> Move basketball</p>
+      </div>
+                    <div class="help-section">
+                <h3>Shooting</h3>
+                <p><kbd>W</kbd><kbd>S</kbd> Adjust shot power</p>
+                <p><kbd>SPACE</kbd> Shoot basketball</p>
+                <p><kbd>R</kbd> Reset ball to center</p>
+              </div>
+              <div class="help-section">
+                <h3>Game Modes</h3>
+                <p><kbd>T</kbd> Toggle timed mode (60 seconds)</p>
+                <p><kbd>Y</kbd> Toggle real game mode (4 quarters)</p>
+                <p>• Free Shoot: Unlimited time</p>
+                <p>• Timed Mode: Score as many points as possible in 60 seconds</p>
+                <p>• Real Game: 4 quarters of 2 minutes each, track team scores</p>
+                <p>• Press T or Y twice to start/stop each mode</p>
+              </div>
+      <div class="help-section">
+        <h3>Camera</h3>
+        <p><kbd>O</kbd> Toggle camera controls</p>
+        <p><kbd>B</kbd> Toggle auto-camera tracking (starts ON)</p>
+        <p>• Auto-camera follows ball during movement and shots</p>
+        <p>• Press B to turn OFF, press B again to turn ON</p>
+      </div>
+      <div class="help-section">
+        <h3>Scoring</h3>
+        <p>• Shots inside 3-point line = 2 points</p>
+        <p>• Shots beyond 3-point line = 3 points</p>
+        <p>• All shots are tracked and counted</p>
+      </div>
+      <button id="help-close">Close</button>
+    </div>
+  </div>
+  </div>
+  <!-- ─────────────────────────────────────────────────────────────── -->
+
+  <!-- Three-/Cannon-based game entry point -->
+  <script type="module" src="src/hw5.js"></script>
+</body>
+</html>

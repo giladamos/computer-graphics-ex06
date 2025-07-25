@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Computer Graphics - Exercise 5 - Interactive Basketball Court with WebGL</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .instructions {
+            background-color: #f9f9f9;
+            border-left: 5px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .mandatory {
+            background-color: #e8f4f8;
+            border-left: 5px solid #e74c3c;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .code {
+            font-family: monospace;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+            border: 1px solid #ddd;
+        }
+        .note {
+            background-color: #fffbea;
+            border-left: 5px solid #f1c40f;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        .resources {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .highlight {
+            background-color: #FFFF99;
+            font-weight: bold;
+            padding: 2px 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Computer Graphics - Exercise 5</h1>
+        <h2>Interactive Basketball Court with WebGL</h2>
+        <p>Spring Semester 2025</p>
+    </div>
+
+    <h2>Overview</h2>
+    <p>
+        In this exercise, you will implement an interactive 3D basketball court scene using WebGL and Three.js. 
+        You will create a realistic basketball court with hoops, an animated basketball that can be controlled by the user, 
+        and physics-based interactions.
+    </p>
+
+    <div class="mandatory">
+        <h3>MANDATORY REQUIREMENTS - HW05 INFRASTRUCTURE</h3>
+        <p>Your implementation <strong>MUST</strong> include ALL of the following infrastructure elements:</p>
+        <ol>
+            <li>A properly sized basketball court with at least the following court markings:
+                <ul>
+                    <li>Center circle</li>
+                    <li>Three-point lines for both sides</li>
+                    <li>Center line</li>
+                </ul>
+            </li>
+            <li>Two basketball hoops, each with:
+                <ul>
+                    <li>Backboard (white, partially transparent)</li>
+                    <li>Rim (orange) at the correct regulation height</li>
+                    <li>Net implemented with line segments</li>
+                    <li>Support structure (pole and arms) correctly positioned behind the backboard</li>
+                </ul>
+            </li>
+            <li>A static basketball with:
+                <ul>
+                    <li>Proper orange color and black seams</li>
+                    <li>Positioned at center court</li>
+                    <li>Proper size and geometry</li>
+                </ul>
+            </li>
+            <li>Camera and lighting infrastructure:
+                <ul>
+                    <li>Appropriate lighting with shadows</li>
+                    <li>Interactive camera controls (orbit)</li>
+                    <li>Appropriate initial camera positioning</li>
+                </ul>
+            </li>
+            <li>Basic UI framework:
+                <ul>
+                    <li>HTML container elements for future score display</li>
+                    <li>HTML container elements for future controls display</li>
+                    <li>Basic CSS styling for UI elements</li>
+                </ul>
+            </li>
+        </ol>
+        <div class="note">
+            <p><strong>Note:</strong> Interactive controls, physics-based movement, basketball shooting mechanics, rotation animations, and the scoring system will be implemented in the next exercise (HW06).</p>
+        </div>
+    </div>
+
+    <div class="instructions">
+        <h3>SPECIFIC IMPLEMENTATION DETAILS</h3>
+        <p>Your basketball court must meet these specific requirements:</p>
+        
+        <h4>1. Court Dimensions and Appearance</h4>
+        <ul>
+            <li>Court floor should be a wooden color (e.g., brown)</li>
+            <li>Court should be rectangular with proportions approximately 2:1 (length:width)</li>
+            <li>Court lines must be white and clearly visible</li>
+            <li>Three-point lines must be properly curved arcs at both ends</li>
+            <li>Center circle must be correctly positioned at center court</li>
+        </ul>
+
+        <h4>2. Basketball Hoops</h4>
+        <ul>
+            <li>Rim height must be significantly higher than the court level (representing 10 feet height)</li>
+            <li>Backboard must be rectangular, white, and partially transparent</li>
+            <li>Support structures must be positioned BEHIND the backboard, not on the court</li>
+            <li>Hoops must face toward center court</li>
+            <li>Each hoop must include at least one support arm connecting the pole to the backboard</li>
+            <li>Nets must be created using at least 8 line segments</li>
+        </ul>
+
+        <h4>3. Static Basketball</h4>
+        <ul>
+            <li>Ball must be orange with black seam lines</li>
+            <li>Ball must be positioned at center court</li>
+            <li>Ball must have proper size and spherical geometry</li>
+            <li>Ball texture/material should be realistic</li>
+        </ul>
+
+        <h4>4. UI Framework Preparation</h4>
+        <ul>
+            <li>Create HTML containers for future score display</li>
+            <li>Create HTML containers for future controls instructions</li>
+            <li>Implement basic CSS styling for UI elements</li>
+            <li>Position UI elements appropriately on screen</li>
+            <li>Ensure camera controls are toggleable with 'O' key</li>
+        </ul>
+    </div>
+
+    <div class="note">
+        <h3>CONTROLS FOR HW05 INFRASTRUCTURE</h3>
+        <p>
+            Your HW05 implementation <strong>MUST</strong> support this control:
+        </p>
+        <ul>
+            <li><span class="highlight">O Key</span>: Toggle orbit camera controls</li>
+        </ul>
+        <p>
+            <strong>Note:</strong> Interactive basketball controls (Arrow Keys, W/S Keys, Spacebar, R Key) will be implemented in the next exercise (HW06).
+        </p>
+    </div>
+
+    <h3>Getting Started with the Starter Code</h3>
+    <p>
+        The starter code provides you with the following:
+    </p>
+    <ul>
+        <li>Basic THREE.js setup (scene, camera, renderer)</li>
+        <li>Basic lighting setup with shadows enabled</li>
+        <li>A simple brown court surface without any markings</li>
+        <li>Orbit camera controls that can be toggled with the 'O' key</li>
+        <li>Basic animation loop</li>
+    </ul>
+    
+    <p>Your task is to build upon this foundation by adding all the required elements.</p>
+
+    <h3>Step-by-Step Implementation Guide</h3>
+
+    <ol>
+        <li>
+            <strong>Study the existing code</strong>
+            <p>Examine the starter code to understand the scene setup, camera positioning, and orbit controls.</p>
+        </li>
+        <li>
+            <strong>Add court lines</strong>
+            <p>Implement the center line, three-point lines, and center circle as white lines on the court surface.</p>
+        </li>
+        <li>
+            <strong>Create the basketball hoops</strong>
+            <p>Implement two hoops with backboards, rims, nets, and support structures at both ends of the court.</p>
+        </li>
+        <li>
+            <strong>Create the static basketball</strong>
+            <p>Implement a basketball with proper appearance positioned at center court.</p>
+        </li>
+        <li>
+            <strong>Set up UI framework</strong>
+            <p>Create HTML containers and CSS styling for future interactive elements.</p>
+        </li>
+    </ol>
+
+    <h3>Grading Criteria</h3>
+    <table>
+        <tr>
+            <th>Component</th>
+            <th>Points</th>
+            <th>Requirements</th>
+        </tr>
+        <tr>
+            <td>Basketball Court</td>
+            <td>20</td>
+            <td>Proper implementation of court with all required markings</td>
+        </tr>
+        <tr>
+            <td>Basketball Hoops</td>
+            <td>20</td>
+            <td>Correct implementation of hoops with all required components</td>
+        </tr>
+        <tr>
+            <td>Static Basketball</td>
+            <td>20</td>
+            <td>Properly modeled basketball with correct appearance and positioning</td>
+        </tr>
+        <tr>
+            <td>Camera Controls</td>
+            <td>10</td>
+            <td>Orbit camera controls properly implemented and toggleable</td>
+        </tr>
+        <tr>
+            <td>UI Framework</td>
+            <td>15</td>
+            <td>HTML containers and CSS styling prepared for future interactive elements</td>
+        </tr>
+        <tr>
+            <td>Code Quality</td>
+            <td>5</td>
+            <td>Well-organized, commented, and efficient code</td>
+        </tr>
+    </table>
+
+    <div class="note">
+        <h3>Additional Infrastructure Challenges (Optional) - Bonus: 10 Points</h3>
+        <p>For students seeking additional challenges in HW05, consider implementing any of these features for up to 10 bonus points:</p>
+        <ul>
+            <li>More detailed court markings (free throw lines, key areas)</li>
+            <li>Textured surfaces for court and basketball</li>
+            <li>Enhanced lighting setup with multiple light sources</li>
+            <li>More detailed hoop models (chain nets, branded backboards)</li>
+            <li>Stadium environment (bleachers, scoreboard)</li>
+            <li>Multiple camera preset positions</li>
+        </ul>
+        <p><strong>Note:</strong> Physics, interactive controls, and scoring features will be the focus of the next exercise (HW06).</p>
+    </div>
+
+    <div class="resources">
+        <h3>Helpful Resources</h3>
+        <ul>
+            <li><a href="https://threejs.org/docs/">Three.js Documentation</a></li>
+            <li><a href="https://threejs.org/examples/">Three.js Examples</a></li>
+            <li><a href="https://discoverthreejs.com/">Discover Three.js</a></li>
+        </ul>
+    </div>
+
+    <h3>Submission Requirements</h3>
+    <p>
+        Submit your completed exercise in one of the following ways:
+    </p>
+    <ul>
+        <li><strong>RECOMMENDED: Link to a public GitHub repository</strong> containing your code and screenshots</li>
+        <li>Alternative: Zip file containing all files</li>
+    </ul>
+    <p>
+        Your submission must include:
+    </p>
+    <ul>
+        <li>All source code files</li>
+        <li>A README.md file explaining:
+            <ul>
+                <li><strong>MANDATORY: Full names of all group members</strong></li>
+                <li>How to run your implementation</li>
+                <li>Any additional features you implemented</li>
+                <li>Any known issues or limitations</li>
+                <li>Sources of any external assets used</li>
+            </ul>
+        </li>
+        <li><strong>MANDATORY: Screenshots of your implementation showing:</strong>
+            <ul>
+                <li>Overall view of the basketball court with hoops</li>
+                <li>Close-up view of basketball hoops with nets</li>
+                <li>View showing the basketball positioned at center court</li>
+                <li>View demonstrating camera controls functionality</li>
+            </ul>
+        </li>
+    </ul>
+
+    <div class="note">
+        <p><strong>Due Date:</strong> June 22, 2025, 23:59</p>
+    </div>
+
+</body>
+</html>
